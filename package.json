@@ -1,0 +1,31 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --inspect index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HZ-Dream/Projects_NodeJS.git"
+  },
+  "keywords": [
+    "blog",
+    "dream",
+    "blog"
+  ],
+  "author": "Dream",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HZ-Dream/Projects_NodeJS/issues"
+  },
+  "homepage": "https://github.com/HZ-Dream/Projects_NodeJS#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
