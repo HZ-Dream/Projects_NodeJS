@@ -1,0 +1,54 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "beautiful": "prettier --single-quote --trailing-comma all --tab-width 4 --write 'src/**/*.{js,json,scss}'",
+    "start": "nodemon --inspect src/index.js",
+    "watch": "sass --no-source-map --watch src/resources/scss/app.scss src/public/css/app.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HZ-Dream/Projects_NodeJS.git"
+  },
+  "keywords": [
+    "blog",
+    "dream",
+    "blog"
+  ],
+  "author": "Dream",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HZ-Dream/Projects_NodeJS/issues"
+  },
+  "homepage": "https://github.com/HZ-Dream/Projects_NodeJS#readme",
+  "description": "",
+  "lint-staged": {
+    "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-handlebars": "^8.0.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.15.1",
+    "mongoose-delete": "^1.0.2",
+    "mongoose-paginate-v2": "^1.9.1",
+    "mongoose-sequence": "^6.0.1",
+    "mongoose-slug-updater": "^3.3.0"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
+    "sass": "^1.89.0"
+  }
+}

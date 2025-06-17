@@ -1,0 +1,185 @@
+<form name="container-form" method="POST" class="mt-4" action="/courses/handle-form-actions">
+    <div>
+        <h3>Danh sách khoá học của tôi</h3>
+        <a class="btn btn-secondary" href="/me/trash/courses"><i class="fas fa-trash"></i>Thùng rác ({{deletedCount}})</a>
+    
+        <div class="mt-4 d-flex align-items-center">
+          <select class="form-select form-select-sm selectAll-options" aria-label="Default select example" name="action" required>
+              <option value="" selected>--- Chọn hành động ---</option>
+              <option value="delete">Xoá</option>
+          </select>
+
+          <button class="btnExecute btn btn-primary btn-sm disabled">Thực hiện</button>
+        </div>
+    </div>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+            <th scope="col">
+              <input class="form-check-input" type="checkbox" value="" id="checkbox-all"> All
+            </th>
+            <th scope="col">ID  
+              {{{sortable '_id' _sort}}}
+            </th>
+            <th scope="col">Tên khoá học 
+              {{{sortable 'name' _sort}}}
+            </th>
+            <th scope="col">Trình độ
+              {{{sortable 'level' _sort}}}
+            </th>
+            <th scope="col">Thời gian tạo
+              {{{sortable 'createdAt' _sort}}}
+            </th>
+            <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#courses}}
+            <tr>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="courseIds[]" value="{{this._id}}">
+                    </div>
+                </td>
+                <th scope="row">{{this._id}}</th>
+                <td>{{this.name}}</td>
+                <td>{{this.level}}</td>
+                <td>{{formatDate this.createdAt}}</td>
+                <td>
+                    <a href="/courses/{{this._id}}/edit" class="btn btn-primary">Sửa</a>
+                    <a href="#" class="btn btn-primary" data-id="{{this._id}}" data-bs-toggle="modal" data-bs-target="#delete-course-modal">Xoá</a>
+                </td>
+            </tr>
+
+            {{else}}
+            <tr>
+                <td colspan="5" class="text-center">Bạn chưa có khoá học nào.
+                   <a href="/courses/create">Đăng khoá học ngay</a>
+                </td>
+            </tr>
+            {{/courses}}
+        </tbody>
+    </table>
+
+    <div class="float-end mt-4">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link btnPagination previous" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {{#each pageToShow}}
+              <li class="page-item">
+                <a class="page-link" href="/me/stored/courses?_page={{this}}">{{this}}</a>
+              </li>
+          {{/each}}
+          <li class="page-item">
+            <a class="page-link btnPagination next" href="" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+</form>
+
+{{!-- Confirm Delete --}}
+<div id="delete-course-modal" class="modal mt-5" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">XOÁ KHOÁ HỌC</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc muốn xoá khoá học này?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="btnDelete-course" type="button" class="btn btn-danger">Xoá</button>
+        <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Huỷ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- Hidden Form --}}
+<form name="formDelete" method="POST"></form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var courseId;
+      var formDelete = document.forms['formDelete'];
+      // var containerForm = document.forms['container-form'];
+      var containerForm = $('form[name="container-form"]');
+      var btnDelete = document.getElementById('btnDelete-course');
+      var checkboxAll = $('#checkbox-all');
+      var courseItemCheckbox = $('input[name="courseIds[]"]');
+      var btnExecute = $('.btnExecute');
+      var btnPagination = $('.btnPagination');
+
+      $('#delete-course-modal').on('show.bs.modal', function (event) {
+          var button = $(event. relatedTarget);
+          courseId = button.data('id');
+      });
+
+      btnDelete.addEventListener('click', function () {
+          formDelete.action = '/courses/' + courseId + '/?_method=DELETE';
+          formDelete.submit();
+      });
+
+      checkboxAll.change(function () {
+          let isChecked = $(this).prop('checked');
+          courseItemCheckbox.prop('checked', isChecked);
+          updateButtonState();
+      });
+
+      courseItemCheckbox.change(function () {
+          let isCheckedAll = courseItemCheckbox.length === $('input[name="courseIds[]"]:checked').length;
+          checkboxAll.prop('checked', isCheckedAll);  
+          updateButtonState();
+      });
+
+      function updateButtonState() {
+        let countChecked = $('input[name="courseIds[]"]:checked').length;
+        if (countChecked > 0) {
+            btnExecute.removeClass('disabled');
+        } else {
+            btnExecute.addClass('disabled');
+        }
+      }
+
+      containerForm.on('submit', (function (e) {
+          let isSubmitted = btnExecute.hasClass('disabled');
+          if (isSubmitted) {
+              e.preventDefault();
+              return;
+          }
+      }));
+
+      btnPagination.on('click', function (e) {
+          e.preventDefault();
+          
+          const limit = parseInt('{{limit}}');;
+          const currentPage = parseInt('{{currentPage}}');
+          const totalPages = parseInt('{{totalPages}}');
+
+          if($(this).hasClass('previous')) {
+              if (currentPage > 1) {
+                  window.location.href = `/me/stored/courses?_page=${currentPage - 1}`;
+              } else {
+                  window.location.href = `/me/stored/courses?_page=${totalPages}`;
+              }
+          } else if($(this).hasClass('next')) {
+              if (currentPage < totalPages) {
+                  window.location.href = `/me/stored/courses?_page=${currentPage + 1}`;
+              } else {
+                  window.location.href = `/me/stored/courses?_page=1`;
+              }
+          }
+      });
+    });
+</script>

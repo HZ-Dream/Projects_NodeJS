@@ -1,0 +1,36 @@
+@use 'variables' as var;
+
+a {
+    text-decoration: none;
+}
+
+i {
+    margin-right: 5px;
+}
+
+.card-course-item {
+    margin-top: 16px;
+}
+
+.card-link {
+    text-decoration: none;
+    color: black;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.selectAll-options {
+    width: 200px;
+    margin-right: 20px;
+}
+
+.fa-sort, .fa-sort-up, .fa-sort-down {
+    margin-left: 5px;
+    color: blue;
+    cursor: pointer;
+}
