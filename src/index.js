@@ -1,8 +1,10 @@
 const path = require('path');
 const express = require('express');
+const multer = require('multer');
 const morgan = require('morgan');
 const handlebars = require('express-handlebars').engine;
 const methodOverride = require('method-override');
+const session = require('express-session');
 const app = express();
 const port = 3000;
 
@@ -14,6 +16,13 @@ const db = require('./config/db');
 
 // Connect to database
 db.connect();
+
+app.use(session({
+  secret: 'login1209',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -42,6 +51,12 @@ app.engine(
 );
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'resources', 'views'));
+
+// Sesssion User
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
+  next();
+});
 
 // Routes init
 route(app);

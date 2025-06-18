@@ -34,7 +34,7 @@ CourseSchema.query.sortable = function (req) {
 mongoose.plugin(slug);
 CourseSchema.plugin(mongoosePaginate);
 
-CourseSchema.plugin(AutoIncrement);
+CourseSchema.plugin(AutoIncrement, { id: 'course_id_counter', inc_field: '_id' });
 CourseSchema.plugin(mongooseDelete, { 
     deletedAt: true,
     overrideMethods: 'all' 

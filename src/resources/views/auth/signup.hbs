@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form">
+            <div class="auth-form__message"><span>{{error}}</span></div>
+            <h2 class="auth-form__title">Sign Up</h2>
+            <form action="/auth/sign-up/store" method="POST" enctype="multipart/form-data" autocomplete="off">
+            <div class="auth-form-group">
+                <label for="signup_name">Name:</label>
+                <input type="text" id="signup_name" name="signup_name" placeholder="Enter your name" required autocomplete="off">
+            </div>
+            <div class="auth-form-group">
+                <label for="signup_email">Email:</label>
+                <input type="email" id="signup_email" name="signup_email" placeholder="Enter your email" required autocomplete="off">
+            </div>
+            <div class="auth-form-group">
+                <label for="signup_password">Password:</label>
+                <input type="password" id="signup_password" name="signup_password" placeholder="Enter your password" required autocomplete="new-password">
+            </div>
+
+            <div class="auth-form-group">
+                <label for="signup_avatar">Avatar:</label>
+                <input type="file" id="signup_avatar" name="signup_avatar">
+            </div>
+
+            <button type="submit" class="auth-form__submit-btn">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const messageError = '{{error}}';
+        console.log("Error message:", messageError);
+
+        if (messageError && messageError.trim() !== "") {
+            $('input').val('');
+        }
+    });
+</script>
+
+
+</html>
+
