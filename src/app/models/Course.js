@@ -14,6 +14,7 @@ const CourseSchema = new Shema({
     image: { type: String,  },
     videoId: { type: String, required: true, },
     level: { type: String,  },
+    createdBy: { type: Number, }
 }, {
     _id: false,
     timestamps: true,
@@ -22,9 +23,9 @@ const CourseSchema = new Shema({
 // Custom query helpers
 CourseSchema.query.sortable = function (req) {
     if ('_sort' in req.query) {
-        const isValidTypes = ['asc', 'desc'].includes(req.query.type);
+        const isValidType = ['asc', 'desc'].includes(req.query.type);
         return this.sort({
-            [req.query.column]: isValidTypes ? req.query.type : 'desc'
+            [req.query.column]: isValidType ? req.query.type : 'desc'
         });
     }
     return this;
